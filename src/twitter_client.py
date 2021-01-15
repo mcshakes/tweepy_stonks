@@ -4,6 +4,9 @@ from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
 
+import numpy
+import pandas as pd
+
 from dotenv import load_dotenv
 import os
 load_dotenv()
@@ -19,13 +22,6 @@ class TwitterAuthenticator():
                               os.getenv("ACCESS_TOKEN_SECRET"))
         return auth
 
-    # def authenticate(self):
-    #     auth = OAuthHandler(twitter_credentials.CONSUMER_KEY,
-    #                         twitter_credentials.CONSUMER_SECRET)
-    #     auth.set_access_token(twitter_credentials.ACCESS_TOKEN,
-    #                           twitter_credentials.ACCESS_TOKEN_SECRET)
-    #     return auth
-
 
 # # # # TWITTER CLIENT # # # #
 
@@ -36,6 +32,8 @@ class TwitterClient():
 
         self.twitter_user = twitter_user
 
+    def get_client(self):
+        return self.twitter_client
 
 # # # # TWITTER STREAMER # # # #
 
@@ -56,7 +54,7 @@ class TwitterStreamer():
 
         stream = Stream(auth, listener)
         print("Within Streamer, ", stream)
-        stream.filter(track=hash_tag_list)
+        stream.filter(languages=["en"], track=hash_tag_list)
 
 
 class TwitterListener(StreamListener):
@@ -84,15 +82,23 @@ class TwitterListener(StreamListener):
         print(status)
 
 
-# twitterListener = TwitterListener()
-# myStream.filter(track=["$GME", "$PLTR", "$TSLA"])
+class TweetAnalyzer():
+    """
+    Analize and categorize content from tweets
+    """
+    pass
+
 
 if __name__ == "__main__":
+    # twitter_client = TwitterClient()
+
+    # api = twitter_client.get_client()
+
+    # tweets = api.user_timeline(screen_name="unusual_whales", count=20)
+    # print(tweets)
     hash_tag_list = ["$GME", "$PLTR", "$TSLA", "$MT", "$BB"]
+
     fetched_tweets_filename = "tweets.json"
 
     twitter_streamer = TwitterStreamer()
     twitter_streamer.stream_tweets(fetched_tweets_filename, hash_tag_list)
-
-    # twitter_client = TwitterClient()
-    # tweet_ana
