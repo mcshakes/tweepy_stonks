@@ -4,6 +4,9 @@
 
 `source env/bin/activate`
 
+`mongod --dbpath ~/data/db` 
+
+for DB path
 
 ```
 Package           Version
@@ -27,3 +30,6 @@ tweepy            3.10.0
 urllib3           1.26.2
 ```
 
+## NOTES to Self:
+
+1) Can stream to a DB

@@ -3,6 +3,7 @@ from tweepy import Cursor
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
+from pymongo import MongoClient
 
 import numpy
 import pandas as pd
@@ -11,6 +12,7 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
+MONGO_HOST = os.getenv("MONGO_HOST")
 
 # # # # TWITTER AUTHENTICATOR # # # #
 
@@ -53,7 +55,11 @@ class TwitterStreamer():
         auth = self.twitter_authenticator.authenticate()
 
         stream = Stream(auth, listener)
-        print("Within Streamer, ", stream)
+        print("")
+        print("----------------------")
+        print("Streaming: ", stream)
+        print("----------------------")
+        print("")
         stream.filter(languages=["en"], track=hash_tag_list)
 
 
@@ -86,7 +92,11 @@ class TweetAnalyzer():
     """
     Analize and categorize content from tweets
     """
-    pass
+
+    def clean_tweet(self, tweet):
+        return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
+
+    def analyze_sentiment(self, tweet):
 
 
 if __name__ == "__main__":
